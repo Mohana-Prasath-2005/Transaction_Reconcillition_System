@@ -1,0 +1,22 @@
+[build]
+  base    = "Reconciliation System/frontend"
+  command = "npm install && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# API proxy: forwards /api/* to the hosted Flask backend, stripping the /api prefix
+# so that /api/transactions -> https://<backend>/transactions (matches Vite dev proxy).
+# Update the `to` URL once the Flask backend is deployed (Render / Railway / Fly.io).
+[[redirects]]
+  from   = "/api/*"
+  to    = "https://REPLACE-WITH-BACKEND-HOST/:splat"
+  status = 200
+  force  = true
+
+# SPA fallback for React Router: serve index.html for any unmatched path.
+[[redirects]]
+  from   = "/*"
+  to    = "/index.html"
+  status = 200
